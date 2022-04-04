@@ -2,9 +2,10 @@
 
 
 if [ -z $FMMASTER ]; then
-  sleep 10
+  echo "FM Client : Begining"
   INST=/usr/local/facileManager/Installator
   if [ ! -d /usr/local/facileManager/fmDNS ]; then
+    echo "FM Client : Deploying"
     VD=tmp.$$
     mkdir /usr/local/facileManager/$VD
     cd /usr/local/facileManager/$VD
@@ -15,6 +16,7 @@ if [ -z $FMMASTER ]; then
     mkdir $INST
     fi
   if [ ! -e /usr/local/facileManager/config.inc.php ]; then
+    echo "FM Client : Try to configure"
     echo -e "$FMURL\n\n$FMMTH\n" | php /usr/local/facileManager/fmDNS/client.php install | tee -a $INST/install.process
 #cat <<EOF >/etc/sudoers.d/99_fmDNS
 #fm_user ALL=(root) NOPASSWD: /usr/bin/php
@@ -31,15 +33,19 @@ if [ -z $FMMASTER ]; then
     mkdir /var/log/bind
     chown bind:bind /var/log/bind
   else
+    echo "FM Client : yet installed"
     cp $INST/etc+sudoers.d+99_fmDNS /etc/sudoers.d/99_fmDNS
     cp $INST/etc+passwd /etc/passwd
     cp $INST/etc+shadow /etc/shadow
     cp $INST/etc+group  /etc/group
     fi
   cd /
+  echo "FM Server : Running"
   monit -d 10 -Ic /etc/monit/monitrc
 else
+  echo "FM Server : Bengining"
   if [ ! -d /var/www/html ]; then
+    echo "FM Server : Deploying"
     chmod a+rwt /tmp
     cd /var/www
     mkdir /var/www/.ssh
@@ -73,6 +79,7 @@ require_once(ABSPATH . 'fm-modules/facileManager/functions.php');
 EOF
     chmod a+rw html/config.inc.php
   fi
+  echo "FM Server : Running"
   apache2-foreground
 fi
 
