@@ -15,8 +15,10 @@ if [ -z $FMMASTER ]; then
     rm -rf $VD
     mkdir $INST
     fi
-  if [ ! -e /usr/local/facileManager/config.inc.php ]; then
-    echo "FM Client : Try to configure"
+  while [ ! -e /usr/local/facileManager/config.inc.php ]; do
+    echo "FM Client : Try to configure, waiting for 20 sec"
+    sleep 20
+    echo "FM Client : Try to configure, go"
     echo -e "$FMURL\n\n$FMMTH\n" | php /usr/local/facileManager/fmDNS/client.php install | tee -a $INST/install.process
 #cat <<EOF >/etc/sudoers.d/99_fmDNS
 #fm_user ALL=(root) NOPASSWD: /usr/bin/php
@@ -32,13 +34,12 @@ if [ -z $FMMASTER ]; then
     tar xzf /opt/fmtools/etc+bind.tar.gz
     mkdir /var/log/bind
     chown bind:bind /var/log/bind
-  else
-    echo "FM Client : yet installed"
-    cp $INST/etc+sudoers.d+99_fmDNS /etc/sudoers.d/99_fmDNS
-    cp $INST/etc+passwd /etc/passwd
-    cp $INST/etc+shadow /etc/shadow
-    cp $INST/etc+group  /etc/group
-    fi
+    done
+  echo "FM Client : installed go"
+  cp $INST/etc+sudoers.d+99_fmDNS /etc/sudoers.d/99_fmDNS
+  cp $INST/etc+passwd /etc/passwd
+  cp $INST/etc+shadow /etc/shadow
+  cp $INST/etc+group  /etc/group
   cd /
   echo "FM Server : Running"
   monit -d 10 -Ic /etc/monit/monitrc
