@@ -2,9 +2,9 @@ version: '2.4'
 services:
   fmmaster:
     build:
-      context: /${DOCKERROOT}/dns.${DOMAIN}/build
+      context: ${DOCKERROOT}/build
       dockerfile: Dockerfile_fms_02
-    image: local/fmmaster:02
+    image: adlp/famindocker:02
     container_name: dns.${DOMAIN}
     hostname: dns.${DOMAIN}
     ports:
@@ -14,9 +14,9 @@ services:
       - MYSQL_HOST=mysql
     volumes:
       - /etc/timezone:/etc/timezone;ro
-      - /${DOCKERROOT}/dns.${DOMAIN}/fm/master/appli:/var/www/
-      - /${DOCKERROOT}/dns.${DOMAIN}/fm/master/var+log:/var/log/
-      - /${DOCKERROOT}/dns.${DOMAIN}/fm/master/tmp:/tmp/
+      - ${DOCKERROOT}/dns.${DOMAIN}/fm/master/appli:/var/www/
+      - ${DOCKERROOT}/dns.${DOMAIN}/fm/master/var+log:/var/log/
+      - ${DOCKERROOT}/dns.${DOMAIN}/fm/master/tmp:/tmp/
     extra_hosts:
       - dns.${DOMAIN}:${WUIIP}
       - fmdns00.dns.${DOMAIN}:10.0.10.9
@@ -34,7 +34,7 @@ services:
     hostname: mysql
     volumes:
       - /etc/timezone:/etc/timezone:ro
-      - /${DOCKERROOT}/dns.${DOMAIN}/fm/db:/var/lib/mysql
+      - ${DOCKERROOT}/dns.${DOMAIN}/fm/db:/var/lib/mysql
     logging:
       driver: syslog
       options:
@@ -44,9 +44,9 @@ services:
     restart: always
   fmdns00:
     build: 
-      context: /${DOCKERROOT}/dns.${DOMAIN}/build
+      context: ${DOCKERROOT}/build
       dockerfile: Dockerfile_fms_02
-    image: local/fmmaster:02
+    image: adlp/famindocker:02
     container_name: fmdns00.dns.${DOMAIN}
     hostname: fmdns00.dns.${DOMAIN}
     ports:
@@ -58,11 +58,11 @@ services:
       - dns.${DOMAIN}:${WUIIP}
     volumes:
       - /etc/timezone:/etc/timezone:ro
-      - /${DOCKERROOT}/dns.${DOMAIN}/fm/dns00/fm:/usr/local/facileManager
-      - /${DOCKERROOT}/dns.${DOMAIN}/fm/dns00/var+cache+bind:/var/cache/bind
-      - /${DOCKERROOT}/dns.${DOMAIN}/fm/dns00/var+log:/var/log
-      - /${DOCKERROOT}/dns.${DOMAIN}/fm/dns00/etc+bind:/etc/bind
-      - /${DOCKERROOT}/dns.${DOMAIN}/fm/dns00/home:/home
+      - ${DOCKERROOT}/dns.${DOMAIN}/fm/dns00/fm:/usr/local/facileManager
+      - ${DOCKERROOT}/dns.${DOMAIN}/fm/dns00/var+cache+bind:/var/cache/bind
+      - ${DOCKERROOT}/dns.${DOMAIN}/fm/dns00/var+log:/var/log
+      - ${DOCKERROOT}/dns.${DOMAIN}/fm/dns00/etc+bind:/etc/bind
+      - ${DOCKERROOT}/dns.${DOMAIN}/fm/dns00/home:/home
     logging:
       driver: syslog
       options:
@@ -72,9 +72,9 @@ services:
     restart: always
   fmdns01:
     build: 
-      context: /${DOCKERROOT}/dns.${DOMAIN}/build
+      context: ${DOCKERROOT}/build
       dockerfile: Dockerfile_fms_02
-    image: local/fmmaster:02
+    image: adlp/famindocker:02
     container_name: fmdns01.dns.${DOMAIN}
     hostname: fmdns01.dns.${DOMAIN}
     ports:
@@ -86,11 +86,11 @@ services:
       - dns.${DOMAIN}:${WUIIP}
     volumes:
       - /etc/timezone:/etc/timezone:ro
-      - /${DOCKERROOT}/dns.${DOMAIN}/fm/dns01/fm:/usr/local/facileManager
-      - /${DOCKERROOT}/dns.${DOMAIN}/fm/dns01/var+cache+bind:/var/cache/bind
-      - /${DOCKERROOT}/dns.${DOMAIN}/fm/dns01/var+log:/var/log
-      - /${DOCKERROOT}/dns.${DOMAIN}/fm/dns01/etc+bind:/etc/bind
-      - /${DOCKERROOT}/dns.${DOMAIN}/fm/dns01/home:/home
+      - ${DOCKERROOT}/dns.${DOMAIN}/fm/dns01/fm:/usr/local/facileManager
+      - ${DOCKERROOT}/dns.${DOMAIN}/fm/dns01/var+cache+bind:/var/cache/bind
+      - ${DOCKERROOT}/dns.${DOMAIN}/fm/dns01/var+log:/var/log
+      - ${DOCKERROOT}/dns.${DOMAIN}/fm/dns01/etc+bind:/etc/bind
+      - ${DOCKERROOT}/dns.${DOMAIN}/fm/dns01/home:/home
     logging:
       driver: syslog
       options:
