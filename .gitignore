@@ -1,0 +1,4 @@
+.env
+fm/
+*.swp
+build/*.swp

@@ -1,0 +1,78 @@
+#!/bin/bash
+
+
+if [ -z $FMMASTER ]; then
+  sleep 10
+  INST=/usr/local/facileManager/Installator
+  if [ ! -d /usr/local/facileManager/fmDNS ]; then
+    VD=tmp.$$
+    mkdir /usr/local/facileManager/$VD
+    cd /usr/local/facileManager/$VD
+    tar xf /opt/fmtools/facilemanager-complete.tar.gz
+    mv facileManager/client/facileManager/* /usr/local/facileManager/
+    cd ..
+    rm -rf $VD
+    mkdir $INST
+    fi
+  if [ ! -e /usr/local/facileManager/config.inc.php ]; then
+    echo -e "$FMURL\n\n$FMMTH\n" | php /usr/local/facileManager/fmDNS/client.php install | tee -a $INST/install.process
+#cat <<EOF >/etc/sudoers.d/99_fmDNS
+#fm_user ALL=(root) NOPASSWD: /usr/bin/php
+#Defaults:fm_user  !requiretty
+#Defaults:fm_user  !env_reset
+#fm_user ALL=(root)      NOPASSWD: /bin/php /home/facileManager/client/facileManager/fmDNS/client.php *
+#EOF
+    cp /etc/sudoers.d/99_fmDNS $INST/etc+sudoers.d+99_fmDNS
+    cp /etc/passwd $INST/etc+passwd
+    cp /etc/shadow $INST/etc+shadow
+    cp /etc/group  $INST/etc+group
+    cd /
+    tar xzf /opt/fmtools/etc+bind.tar.gz
+    mkdir /var/log/bind
+    chown bind:bind /var/log/bind
+  else
+    cp $INST/etc+sudoers.d+99_fmDNS /etc/sudoers.d/99_fmDNS
+    cp $INST/etc+passwd /etc/passwd
+    cp $INST/etc+shadow /etc/shadow
+    cp $INST/etc+group  /etc/group
+    fi
+  cd /
+  monit -d 10 -Ic /etc/monit/monitrc
+else
+  if [ ! -d /var/www/html ]; then
+    chmod a+rwt /tmp
+    cd /var/www
+    mkdir /var/www/.ssh
+    chown www-data:www-data /var/www/.ssh
+    tar xf /opt/fmtools/facilemanager-complete.tar.gz
+    mv facileManager/server html
+    cat << EOF > html/config.inc.php
+<?php
+
+/**
+ * Contains configuration details for facileManager
+ *
+ * @package facileManager
+ *
+ */
+
+/** Database credentials */
+\$__FM_CONFIG['db']['host'] = '$MYSQL_HOST';
+\$__FM_CONFIG['db']['user'] = '$MYSQL_USER';
+\$__FM_CONFIG['db']['pass'] = '$MYSQL_PASSWORD';
+\$__FM_CONFIG['db']['name'] = '$MYSQL_DATABASE';
+
+/** Database SSL connection settings (optional) */
+// \$__FM_CONFIG['db']['key'] = '/path/to/ssl.key';
+// \$__FM_CONFIG['db']['cert'] = '/path/to/ssl.cer';
+// \$__FM_CONFIG['db']['ca'] = '/path/to/ca.pem';
+// \$__FM_CONFIG['db']['capath'] = '/path/to/trusted/cas';
+// \$__FM_CONFIG['db']['cipher'] = null;
+
+require_once(ABSPATH . 'fm-modules/facileManager/functions.php');
+EOF
+    chmod a+rw html/config.inc.php
+  fi
+  apache2-foreground
+fi
+

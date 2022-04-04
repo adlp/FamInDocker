@@ -1,0 +1,33 @@
+FROM php:5.6-apache
+MAINTAINER Antoine Delaporte <adlp@adlp.org>
+
+ENV container=docker
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    apt-get install -y bind9 ssh monit sudo  knot-dnsutils && \
+    apt-get clean -y && \
+    apt-get autoclean -y && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+RUN docker-php-ext-install mysql mysqli && \
+    a2enmod rewrite && \
+    mkdir /opt/fmtools && \
+    mv /var/log /var/log.Origine && \
+    mkdir /var/log && \
+    tar czf /opt/fmtools/etc+bind.tar.gz /etc/bind
+
+WORKDIR /opt/fmtools
+
+RUN curl http://www.facilemanager.com/download/facilemanager-complete-4.2.0.tar.gz --output /opt/fmtools/facilemanager-complete.tar.gz
+
+ADD DeployNRunFM /usr/local/sbin
+ADD monit.conf /etc/monit/conf.d/
+ADD monit-sshd.conf /etc/monit/conf.d/
+ADD monit-bind.conf /etc/monit/conf.d/
+
+RUN chmod a+x /usr/local/sbin/DeployNRunFM
+
+
+CMD ["/usr/local/sbin/DeployNRunFM"]
