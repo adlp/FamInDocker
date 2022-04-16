@@ -3,3 +3,5 @@ fm/
 *.swp
 build/*.swp
 docker-compose.yml
+env-fmclient.env
+env-fmmaster.env
