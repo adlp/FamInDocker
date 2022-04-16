@@ -1,30 +1,30 @@
 version: '2.4'
 services:
-  fmdns00:
+  fmdns01:
     image: adlp/famindocker:02
     container_name: fmdns01.dns.${DOMAIN?err}
     hostname: ${NAMECL?err}
     env_file:
-      - ${DOCKERROOT?err}/env-fmclient.env
+      - ./env-fmclient.env
     ports:
-      - 0.0.0.0:${SSHCL?err}:22
-      - 0.0.0.0:${DNSCL?err}:53/tcp
-      - 0.0.0.0:${DNSCL?err}:53/udp
+      - 0.0.0.0:${SSHCLTCP?err}:22
+      - 0.0.0.0:${DNSCLTCP?err}:53/tcp
+      - 0.0.0.0:${DNSCLUDP?err}:53/udp
     environment:
       - FMMTH=s
     extra_hosts:
-      - dns.${DOMAIN?err}:${WUIIP?err}
+      - ${FMURL?err}:${WUIIP?err}
     volumes:
       - /etc/timezone:/etc/timezone:ro
-      - ${DOCKERROOT?err}/dns.${DOMAIN?err}/fm/dns00/fm:/usr/local/facileManager
-      - ${DOCKERROOT?err}/dns.${DOMAIN?err}/fm/dns00/var+cache+bind:/var/cache/bind
-      - ${DOCKERROOT?err}/dns.${DOMAIN?err}/fm/dns00/var+log:/var/log
-      - ${DOCKERROOT?err}/dns.${DOMAIN?err}/fm/dns00/etc+bind:/etc/bind
-      - ${DOCKERROOT?err}/dns.${DOMAIN?err}/fm/dns00/home:/home
+      - ${DOCKERROOT?err}/dns.${DOMAIN?err}/fm/${NAMECL?err}/fm:/usr/local/facileManager
+      - ${DOCKERROOT?err}/dns.${DOMAIN?err}/fm/${NAMECL?err}/var+cache+bind:/var/cache/bind
+      - ${DOCKERROOT?err}/dns.${DOMAIN?err}/fm/${NAMECL?err}/var+log:/var/log
+      - ${DOCKERROOT?err}/dns.${DOMAIN?err}/fm/${NAMECL?err}/etc+bind:/etc/bind
+      - ${DOCKERROOT?err}/dns.${DOMAIN?err}/fm/${NAMECL?err}/home:/home
     logging:
       driver: syslog
       options:
         syslog-address: udp://127.0.0.1:514
         syslog-facility: local0
-        tag: fmdns00.dns.${DOMAIN?err}
+        tag: fmdns01.dns.${DOMAIN?err}
     restart: always
