@@ -2,3 +2,4 @@
 fm/
 *.swp
 build/*.swp
+docker-compose.yml
