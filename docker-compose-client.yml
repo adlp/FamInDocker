@@ -1,100 +1,30 @@
 version: '2.4'
 services:
-  fmmaster:
-    build:
-      context: ${DOCKERROOT}/build
-      dockerfile: Dockerfile_fms_02
-    image: adlp/famindocker:02
-    container_name: dns.${DOMAIN}
-    hostname: dns.${DOMAIN}
-    ports:
-      - 0.0.0.0:5380:80
-    environment:
-      - FMMASTER=true
-      - MYSQL_HOST=mysql
-    volumes:
-      - /etc/timezone:/etc/timezone;ro
-      - ${DOCKERROOT}/dns.${DOMAIN}/fm/master/appli:/var/www/
-      - ${DOCKERROOT}/dns.${DOMAIN}/fm/master/var+log:/var/log/
-      - ${DOCKERROOT}/dns.${DOMAIN}/fm/master/tmp:/tmp/
-    extra_hosts:
-      - dns.${DOMAIN}:${WUIIP}
-      - fmdns00.dns.${DOMAIN}:10.0.10.9
-      - fmdns01.dns.${DOMAIN}:10.0.10.9
-    logging:
-      driver: syslog
-      options:
-        syslog-address: udp://127.0.0.1:514
-        syslog-facility: local0
-        tag: dns.${DOMAIN}
-    restart: always
-  mysql:
-    image: mysql:5.7-debian
-    container_name: db.dns.${DOMAIN}
-    hostname: mysql
-    volumes:
-      - /etc/timezone:/etc/timezone:ro
-      - ${DOCKERROOT}/dns.${DOMAIN}/fm/db:/var/lib/mysql
-    logging:
-      driver: syslog
-      options:
-        syslog-address: udp://127.0.0.1:514
-        syslog-facility: local0
-        tag: db.dns.${DOMAIN}
-    restart: always
   fmdns00:
-    build: 
-      context: ${DOCKERROOT}/build
-      dockerfile: Dockerfile_fms_02
     image: adlp/famindocker:02
-    container_name: fmdns00.dns.${DOMAIN}
-    hostname: fmdns00.dns.${DOMAIN}
+    container_name: fmdns01.dns.${DOMAIN?err}
+    hostname: ${NAMECL?err}
+    env_file:
+      - ${DOCKERROOT?err}/env-fmclient.env
     ports:
-      - 0.0.0.0:5320:22
+      - 0.0.0.0:${SSHCL?err}:22
+      - 0.0.0.0:${DNSCL?err}:53/tcp
+      - 0.0.0.0:${DNSCL?err}:53/udp
     environment:
-      - FMURL=dns.${DOMAIN}
       - FMMTH=s
     extra_hosts:
-      - dns.${DOMAIN}:${WUIIP}
+      - dns.${DOMAIN?err}:${WUIIP?err}
     volumes:
       - /etc/timezone:/etc/timezone:ro
-      - ${DOCKERROOT}/dns.${DOMAIN}/fm/dns00/fm:/usr/local/facileManager
-      - ${DOCKERROOT}/dns.${DOMAIN}/fm/dns00/var+cache+bind:/var/cache/bind
-      - ${DOCKERROOT}/dns.${DOMAIN}/fm/dns00/var+log:/var/log
-      - ${DOCKERROOT}/dns.${DOMAIN}/fm/dns00/etc+bind:/etc/bind
-      - ${DOCKERROOT}/dns.${DOMAIN}/fm/dns00/home:/home
+      - ${DOCKERROOT?err}/dns.${DOMAIN?err}/fm/dns00/fm:/usr/local/facileManager
+      - ${DOCKERROOT?err}/dns.${DOMAIN?err}/fm/dns00/var+cache+bind:/var/cache/bind
+      - ${DOCKERROOT?err}/dns.${DOMAIN?err}/fm/dns00/var+log:/var/log
+      - ${DOCKERROOT?err}/dns.${DOMAIN?err}/fm/dns00/etc+bind:/etc/bind
+      - ${DOCKERROOT?err}/dns.${DOMAIN?err}/fm/dns00/home:/home
     logging:
       driver: syslog
       options:
         syslog-address: udp://127.0.0.1:514
         syslog-facility: local0
-        tag: fmdns00.dns.${DOMAIN}
-    restart: always
-  fmdns01:
-    build: 
-      context: ${DOCKERROOT}/build
-      dockerfile: Dockerfile_fms_02
-    image: adlp/famindocker:02
-    container_name: fmdns01.dns.${DOMAIN}
-    hostname: fmdns01.dns.${DOMAIN}
-    ports:
-      - 0.0.0.0:5321:22
-    environment:
-      - FMURL=dns.${DOMAIN}
-      - FMMTH=s
-    extra_hosts:
-      - dns.${DOMAIN}:${WUIIP}
-    volumes:
-      - /etc/timezone:/etc/timezone:ro
-      - ${DOCKERROOT}/dns.${DOMAIN}/fm/dns01/fm:/usr/local/facileManager
-      - ${DOCKERROOT}/dns.${DOMAIN}/fm/dns01/var+cache+bind:/var/cache/bind
-      - ${DOCKERROOT}/dns.${DOMAIN}/fm/dns01/var+log:/var/log
-      - ${DOCKERROOT}/dns.${DOMAIN}/fm/dns01/etc+bind:/etc/bind
-      - ${DOCKERROOT}/dns.${DOMAIN}/fm/dns01/home:/home
-    logging:
-      driver: syslog
-      options:
-        syslog-address: udp://127.0.0.1:514
-        syslog-facility: local0
-        tag: fmdns01.dns.${DOMAIN}
+        tag: fmdns00.dns.${DOMAIN?err}
     restart: always
