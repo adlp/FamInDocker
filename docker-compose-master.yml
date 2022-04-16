@@ -3,14 +3,11 @@ services:
   fmmaster:
     image: adlp/famindocker:02
     container_name: dns.${DOMAIN?err}
-    hostname: dns.fmdns.lan
+    hostname: dns.${DOMAIN?err}
     env_file:
-      - ${DOCKERROOT?err}/env-fmmaster.env
+      - ./env-fmmaster.env
     ports:
       - 0.0.0.0:${WUITCP?err}:80
-    environment:
-      - FMMASTER=true
-      - MYSQL_HOST=mysql
     volumes:
       - /etc/timezone:/etc/timezone;ro
       - ${DOCKERROOT?err}/dns.${DOMAIN?err}/fm/master/appli:/var/www/
@@ -28,9 +25,9 @@ services:
   mysql:
     image: mysql:5.7-debian
     container_name: db.dns.${DOMAIN?err}
-    hostname: mysql.fmdns.lan
+    hostname: db.dns.${DOMAIN?err}
     env_file:
-      - ${DOCKERROOT?err}/env-fmmaster.env
+      - ./env-fmmaster.env
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - ${DOCKERROOT?err}/dns.${DOMAIN?err}/fm/db:/var/lib/mysql
@@ -44,15 +41,13 @@ services:
   fmdns00:
     image: adlp/famindocker:02
     container_name: fmdns00.dns.${DOMAIN?err}
-    hostname: dns00.fmdns.lan
+    hostname: fmdns00.dns.${DOMAIN?err}
     env_file:
-      - ${DOCKERROOT?err}/env-fmmaster.env
+      - ./env-fmclient.env
     ports:
       - 0.0.0.0:${SSHCLTCP?err}:22
       - 0.0.0.0:${DNSCLTCP?err}:53/tcp
       - 0.0.0.0:${DNSCLUDP?err}:53/udp
-    environment:
-      - FMMTH=s
     extra_hosts:
       - ${FMURL?err}:${WUIIP?err}
     volumes:
