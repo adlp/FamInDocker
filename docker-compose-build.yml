@@ -18,12 +18,12 @@ services:
       - ${DOCKERROOT?err}/dns.${DOMAIN?err}/fm/master/tmp:/tmp/
     extra_hosts:
       - ${FMURL?err}:${WUIIP?err}
-    logging:
-      driver: syslog
-      options:
-        syslog-address: udp://127.0.0.1:514
-        syslog-facility: local0
-        tag: dns.${DOMAIN?err}
+#    logging:
+#      driver: syslog
+#      options:
+#        syslog-address: udp://127.0.0.1:514
+#        syslog-facility: local0
+#        tag: dns.${DOMAIN?err}
     restart: always
   mysql:
     image: mysql:5.7-debian
@@ -34,12 +34,12 @@ services:
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - ${DOCKERROOT?err}/dns.${DOMAIN?err}/fm/db:/var/lib/mysql
-    logging:
-      driver: syslog
-      options:
-        syslog-address: udp://127.0.0.1:514
-        syslog-facility: local0
-        tag: db.dns.${DOMAIN?err}
+#    logging:
+#      driver: syslog
+#      options:
+#        syslog-address: udp://127.0.0.1:514
+#        syslog-facility: local0
+#        tag: db.dns.${DOMAIN?err}
     restart: always
   fmdns00:
     image: adlp/famindocker:${DOCTAG:-latest}
@@ -60,10 +60,10 @@ services:
       - ${DOCKERROOT?err}/dns.${DOMAIN?err}/fm/dns00/var+log:/var/log
       - ${DOCKERROOT?err}/dns.${DOMAIN?err}/fm/dns00/etc+bind:/etc/bind
       - ${DOCKERROOT?err}/dns.${DOMAIN?err}/fm/dns00/home:/home
-    logging:
-      driver: syslog
-      options:
-        syslog-address: udp://127.0.0.1:514
-        syslog-facility: local0
-        tag: fmdns00.dns.${DOMAIN?err}
+#    logging:
+#      driver: syslog
+#      options:
+#        syslog-address: udp://127.0.0.1:514
+#        syslog-facility: local0
+#        tag: fmdns00.dns.${DOMAIN?err}
     restart: always
