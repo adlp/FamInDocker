@@ -1,7 +1,7 @@
 version: '2.4'
 services:
   fmdns01:
-    image: adlp/famindocker:02
+    image: adlp/famindocker:${DOCTAG:-latest}
     container_name: ${NAMECOCL:-fmdns01}.dns.${DOMAIN?err}
     hostname: ${NAMECL?err}
     env_file:

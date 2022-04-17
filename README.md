@@ -8,6 +8,7 @@ Basic informations:
   * You have to create an .env file with this :
 ```
 #### Base Configuration
+DOCTAG=03                   # Let you choose the image tag
 DOCKERROOT=/tmp/            # The root path of your FacileManager Persistent data, might be the repo directory
 TZ=Europe/Paris             # Your TimeZone
 FMURL=dns.example.lan       # The URL of your FacileManager

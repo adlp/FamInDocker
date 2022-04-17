@@ -1,7 +1,7 @@
 version: '2.4'
 services:
   fmmaster:
-    image: adlp/famindocker:02
+    image: adlp/famindocker:${DOCTAG:-latest}
     container_name: dns.${DOMAIN?err}
     hostname: dns.${DOMAIN?err}
     env_file:
@@ -39,7 +39,7 @@ services:
         tag: db.dns.${DOMAIN?err}
     restart: always
   fmdns00:
-    image: adlp/famindocker:02
+    image: adlp/famindocker:${DOCTAG:-latest}
     container_name: ${NAMECOCL:-fmdns00}.dns.${DOMAIN?err}
     hostname: ${NAMECOCL:-fmdns00}.dns.${DOMAIN?err}
     env_file:
