@@ -35,11 +35,13 @@ MYSQL_USER=facileManager
 MYSQL_PASSWORD=YYYYYYYYYY
 MYSQL_HOST=mysql
 FMMASTER=true
+# NAMESERVERNAME=fmdns00.dns.example.lan   # If you wish that your container use another container to solve :)
 ```
   * and finsh by creating an 'env-fmclient.env' file like this:
 ```
 FMMTH=s
 FMURL=dns.example.lan       # The URL of your FacileManager
+# NAMESERVERNAME=fmdns00.dns.example.lan   # If you wish that your container use another container to solve :)
 ```
 
 

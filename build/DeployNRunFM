@@ -42,6 +42,11 @@ if [ -z $FMMASTER ]; then
   cp $INST/etc+shadow /etc/shadow
   cp $INST/etc+group  /etc/group
   cd /
+  if [ ! -z $NAMESERVERNAME ]; then
+    echo "FM Client: changing DNS solver"
+    NEWRES=`host $NAMESERVERNAME | sed -s "s/$NAMESERVERNAME has address /nameserver /g"`
+    echo $NEWRES >/etc/resolv.conf
+  fi
   echo "FM Server : Running"
   monit -d 10 -Ic /etc/monit/monitrc
 else
@@ -80,6 +85,11 @@ else
 require_once(ABSPATH . 'fm-modules/facileManager/functions.php');
 EOF
     chmod a+rw html/config.inc.php
+  fi
+  if [ ! -z $NAMESERVERNAME ]; then
+    echo "FM Client: changing DNS solver"
+    NEWRES=`host $NAMESERVERNAME | sed -s "s/$NAMESERVERNAME has address /nameserver /g"`
+    echo $NEWRES >/etc/resolv.conf
   fi
   echo "FM Server : Running"
   apache2-foreground
