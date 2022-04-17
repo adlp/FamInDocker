@@ -2,6 +2,14 @@
 
 chown bind:bind /var/cache/bind
 
+if [ ! -z $HOSTTOFILE ]; then
+  HOSTSEP=`echo $HOSTTOFILE | tr -s "," " "` # There is something more smart with IFS, but my brain is not so so smart
+  for i in $HOSTSEP; do
+    NEWLI=`echo $i | sed -s "s/\(.*\):\(.*\)/\2    \1/g"`
+    grep -q "^$NEWLI$" /etc/hosts || echo "$NEWLI" >>/etc/hosts
+    done
+  fi
+
 if [ -z $FMMASTER ]; then
   echo "FM Client : Begining"
   INST=/usr/local/facileManager/Installator

@@ -36,12 +36,14 @@ MYSQL_PASSWORD=YYYYYYYYYY
 MYSQL_HOST=mysql
 FMMASTER=true
 # NAMESERVERNAME=fmdns00.dns.example.lan   # If you wish that your container use another container to solve :)
+# HOSTTOFILE=h3:192.168.42.56,h4:192.168.68.200 # Add some line in your /etc/hosts, without modify docker-compose ;)
 ```
   * and finsh by creating an 'env-fmclient.env' file like this:
 ```
 FMMTH=s
 FMURL=dns.example.lan       # The URL of your FacileManager
 # NAMESERVERNAME=fmdns00.dns.example.lan   # If you wish that your container use another container to solve :)
+# HOSTTOFILE=h1:192.168.2.56,h2:192.168.67.254  # Add some line in your /etc/hosts, without modify docker-compose ;)
 ```
 
 
