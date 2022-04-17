@@ -1,5 +1,6 @@
 #!/bin/bash
 
+chown bind:bind /var/cache/bind
 
 if [ -z $FMMASTER ]; then
   echo "FM Client : Begining"
