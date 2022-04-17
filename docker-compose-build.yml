@@ -2,7 +2,7 @@ version: '2.4'
 services:
   fmmaster:
     build:
-      context: ${DOCKERROOT}/build
+      context: build
       dockerfile: Dockerfile_fms_02
     image: adlp/famindocker:${DOCTAG:-latest}
     container_name: dns.${DOMAIN?err}
