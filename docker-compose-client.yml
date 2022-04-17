@@ -7,9 +7,9 @@ services:
     env_file:
       - ./env-fmclient.env
     ports:
-      - 0.0.0.0:${SSHCLTCP?err}:22
-      - 0.0.0.0:${DNSCLTCP?err}:53/tcp
-      - 0.0.0.0:${DNSCLUDP?err}:53/udp
+      - ${SSHLIP:-0.0.0.0}:${SSHCLTCP?err}:22
+      - ${DNSLIP:-0.0.0.0}:${DNSCLTCP?err}:53/tcp
+      - ${DNSLIP:-0.0.0.0}:${DNSCLUDP?err}:53/udp
     environment:
       - FMMTH=s
     extra_hosts:

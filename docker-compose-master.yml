@@ -7,7 +7,7 @@ services:
     env_file:
       - ./env-fmmaster.env
     ports:
-      - 0.0.0.0:${WUITCP?err}:80
+      - ${WUILIP:-0.0.0.0}:${WUITCP?err}:80
     volumes:
       - /etc/timezone:/etc/timezone;ro
       - ${DOCKERROOT?err}/dns.${DOMAIN?err}/fm/master/appli:/var/www/
@@ -45,9 +45,9 @@ services:
     env_file:
       - ./env-fmclient.env
     ports:
-      - 0.0.0.0:${SSHCLTCP?err}:22
-      - 0.0.0.0:${DNSCLTCP?err}:53/tcp
-      - 0.0.0.0:${DNSCLUDP?err}:53/udp
+      - ${SSHLIP:-0.0.0.0}:${SSHCLTCP?err}:22
+      - ${DNSLIP:-0.0.0.0}:${DNSCLTCP?err}:53/tcp
+      - ${DNSLIP:-0.0.0.0}:${DNSCLUDP?err}:53/udp
     extra_hosts:
       - ${FMURL?err}:${WUIIP?err}
     volumes:
