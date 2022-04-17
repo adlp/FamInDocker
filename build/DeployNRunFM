@@ -19,7 +19,7 @@ if [ -z $FMMASTER ]; then
   while [ ! -e /usr/local/facileManager/config.inc.php ]; do
     echo "FM Client : Try to configure, waiting for 20 sec"
     sleep 20
-    echo "FM Client : Try to configure, go"
+    echo "FM Client : Try to configure on $FMURL with $FMMTH methode, go"
     echo -e "$FMURL\n\n$FMMTH\n" | php /usr/local/facileManager/fmDNS/client.php install | tee -a $INST/install.process
 #cat <<EOF >/etc/sudoers.d/99_fmDNS
 #fm_user ALL=(root) NOPASSWD: /usr/bin/php
