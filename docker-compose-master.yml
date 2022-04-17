@@ -40,8 +40,8 @@ services:
     restart: always
   fmdns00:
     image: adlp/famindocker:02
-    container_name: fmdns00.dns.${DOMAIN?err}
-    hostname: fmdns00.dns.${DOMAIN?err}
+    container_name: ${NAMECOCL:-fmdns00}.dns.${DOMAIN?err}
+    hostname: ${NAMECOCL:-fmdns00}.dns.${DOMAIN?err}
     env_file:
       - ./env-fmclient.env
     ports:

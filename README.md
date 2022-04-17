@@ -17,6 +17,7 @@ WUILIP=0.0.0.0              # IP where the WUI have to be binded
 WUITCP=5380                 # The TCP port where your facilemanager will listen in http (so you have to hide him behin a reverse proxy with https)
 WUIIP=192.168.0.1           # The IP of the reverse proxy
 #### FacileManager Client Configuration
+# NAMECOCL=clientdns        # The container name on the host
 SSHLIP=0.0.0.0              # IP where the SSH have to be binded
 SSHCLTCP=5322               # The SSH port for the client customer (to push the cfg)
 DNSLIP=0.0.0.0              # IP where the DNS have to be binded
