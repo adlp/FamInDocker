@@ -18,6 +18,10 @@ RUN docker-php-ext-install pdo_mysql mysqli && \
     mkdir /var/log && \
     tar czf /opt/fmtools/etc+bind.tar.gz /etc/bind
 
+RUN cp /etc/apache2/apache2.conf /etc/apache2/apache2.conf.orig && \
+    perl -0777  -pe  "s=<Directory /var/www/>\n\tOptions Indexes FollowSymLinks\n\tAllowOverride None\n=<Directory /var/www/>\n\tOptions Indexes FollowSymLinks\n\tAllowOverride All\n=g" /etc/apache2/apache2.conf.orig >/etc/apache2/apache2.conf 
+
+
 WORKDIR /opt/fmtools
 
 RUN curl http://www.facilemanager.com/download/facilemanager-complete-4.2.0.tar.gz --output /opt/fmtools/facilemanager-complete.tar.gz
@@ -28,6 +32,5 @@ ADD monit-sshd.conf /etc/monit/conf.d/
 ADD monit-bind.conf /etc/monit/conf.d/
 
 RUN chmod a+x /usr/local/sbin/DeployNRunFM
-
 
 CMD ["/usr/local/sbin/DeployNRunFM"]
